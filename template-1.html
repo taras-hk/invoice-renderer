@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 2cm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        h1 {
+            text-align: right;
+        }
+
+        .invoice-meta {
+            margin-bottom: 20px;
+        }
+
+        .invoice-parties {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        .invoice-parties td {
+            width: 50%;
+            vertical-align: top;
+            padding: 0;
+            border: none;
+        }
+
+        .invoice-parties h3 {
+            margin-top: 0;
+        }
+
+        .info-table,
+        .totals-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .info-table td,
+        .totals-table td {
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .totals-table {
+            margin-top: 30px;
+            margin-left: auto;
+            width: 300px;
+        }
+
+        .totals-table td {
+            padding: 5px;
+            text-align: right;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .totals-table td:first-child {
+            text-align: left;
+            padding-right: 30px;
+        }
+
+        .bank-details {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Invoice № {{invoice_id}}</h1>
+    <div class="invoice-meta">
+        <strong>Date:</strong> {{invoice_date}}
+    </div>
+
+    <table class="invoice-parties">
+        <tr>
+            <td>
+                <h3>Issued by:</h3>
+                <p>{{issued_by}}</p>
+                <p>Address: {{issuer_address}}</p>
+                <p>Registration number: {{issuer_registration_number}}</p>
+                <p>VAT Number: {{issuer_vat_number}}</p>
+            </td>
+            <td>
+                <h3>Issued to:</h3>
+                <p>{{issued_to}}</p>
+                <p>Address: {{issued_to_address}}</p>
+                <p>Registration number: {{issued_to_registration_number}}</p>
+                <p>VAT Number: {{issued_to_vat_number}}</p>
+            </td>
+        </tr>
+    </table>
+
+    <div class="section">
+        <h3>{{contract_relation}}</h3>
+    </div>
+
+    <div class="section">
+        <table class="info-table">
+            <tr>
+                <td>Type of services</td>
+                <td>Amount in {{ccy}}</td>
+            </tr>
+            <tr>
+                <td>{{type_of_services}}</td>
+                <td>{{net_before_vat_ccy}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="totals-table">
+        <tr>
+            <td>Subtotal before VAT</td>
+            <td>{{subtotal_before_vat}}</td>
+        </tr>
+        <tr>
+            <td>VAT</td>
+            <td>{{vat}}</td>
+        </tr>
+        <tr>
+            <td><strong>TOTAL</strong></td>
+            <td><strong>{{total}}</strong></td>
+        </tr>
+    </table>
+
+    <div class="bank-details">
+        <h3>Please, use the payment credentials below:</h3>
+        <p><strong>Bank: </strong>{{bank_name}}</p>
+        <p><strong>IBAN: </strong>{{iban}}</p>
+        <p><strong>SWIFT: </strong>{{swift}}</p>
+    </div>
+
+</body>
+
+</html>
