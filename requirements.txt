@@ -2,3 +2,4 @@ playwright
 jinja2
 pandas
 openpyxl
+duckdb
