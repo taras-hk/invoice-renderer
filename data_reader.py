@@ -4,24 +4,6 @@ from typing import Dict, List
 
 import pandas as pd
 
-
-def read_companies_data(filepath: str) -> dict:
-    """Read companies mapping from Excel file"""
-    df = pd.read_excel(filepath, sheet_name="Sheet1")
-    companies = {}
-    for _, row in df.iterrows():
-        company_id = row['company_id']
-        companies[company_id] = {
-            'name': row['company_name'],
-            'address': row['company_address'],
-            'registration_number': row['reg_number'],
-            'vat_number': row['vat_number'],
-            'bank_name': row['bank_name'],
-            'iban': row['iban'],
-            'swift': row['swift']
-        }
-    return companies
-
 def process_invoice_data(invoice_data: dict, companies_map: dict) -> dict:
     """Replace company IDs with company details and generate invoice ID"""
     processed_data = invoice_data.copy()
@@ -60,9 +42,7 @@ def process_invoice_data(invoice_data: dict, companies_map: dict) -> dict:
     return processed_data
 
 
-def read_invoices_from_file(filepath: str) -> Dict[str, List[Dict]]:
-    # Load company mappings
-    companies_map = read_companies_data("companies_Data.xlsx")
+def read_invoices_from_file(filepath: str, companies_map: any) -> Dict[str, List[Dict]]:
 
     file_ext = Path(filepath).suffix.lower()
     result = {}

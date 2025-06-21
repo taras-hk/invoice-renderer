@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
+import pandas as pd
 
 
 def main():
@@ -8,8 +9,11 @@ def main():
     parser.add_argument("--template", required=True, help="Path to HTML template file")
     parser.add_argument("--data", required=True, help="Path to CSV file with invoice data")
     parser.add_argument("--output-dir", required=True, help="Directory for output PDF files")
+    parser.add_argument('--companies', required=True, help='Path to companies data file')
 
     args = parser.parse_args()
+
+    companies_map = read_companies_data(args.companies)
 
     # Validate input paths
     if not Path(args.template).exists():
@@ -22,7 +26,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     from data_reader import read_invoices_from_file
-    sheets_data = read_invoices_from_file(args.data)
+    sheets_data = read_invoices_from_file(args.data, companies_map)
 
     for sheet_name, invoices in sheets_data.items():
         # Create sheet-specific directory for Excel files
@@ -73,6 +77,22 @@ def validate_input_path(path: str) -> bool:
     file_path = Path(path)
     return file_path.exists() and file_path.is_file() and file_path.suffix.lower() in ['.html', '.htm']
 
+def read_companies_data(filepath: str) -> dict:
+    """Read companies mapping from Excel file"""
+    df = pd.read_excel(filepath, sheet_name="Sheet1")
+    companies = {}
+    for _, row in df.iterrows():
+        company_id = row['company_id']
+        companies[company_id] = {
+            'name': row['company_name'],
+            'address': row['company_address'],
+            'registration_number': row['reg_number'],
+            'vat_number': row['vat_number'],
+            'bank_name': row['bank_name'],
+            'iban': row['iban'],
+            'swift': row['swift']
+        }
+    return companies
 
 if __name__ == "__main__":
     main()
